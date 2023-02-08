@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"github.com/ChiefGupta/go-fiber-postgres/controllers"
 	"github.com/ChiefGupta/go-fiber-postgres/initializers"
+	"github.com/ChiefGupta/go-fiber-postgres/router"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -35,16 +35,7 @@ func main() {
 		AllowCredentials: true,
 	}))
 
-	app.Route("/users", func(router fiber.Router) {
-		router.Post("", controllers.CreateUserHandler)
-		router.Get("", controllers.FindUsers)
-	})
-
-	app.Route("/users/:userId", func(router fiber.Router) {
-		router.Get("", controllers.FindUserById)
-		router.Delete("", controllers.DeleteUser)
-		router.Patch("", controllers.UpdateUser)
-	})
+	router.Routes(app)
 
 	log.Fatal(app.Listen(":" + config.ServerPort))
 }
